@@ -7,6 +7,7 @@ let scrollContainer = document.querySelector('.scroll-container') as HTMLElement
 let image = document.querySelector('.image-size-wrap img') as HTMLElement
 let points = [...document.querySelectorAll<HTMLElement>('.point')]
 let scrollItems = [...document.querySelectorAll<HTMLElement>('.scroll-item')]
+let overlay = document.querySelector<HTMLElement>('.mountains-img-overlay')
 
 type Step = {
     // pos: { left: number; top: number }
@@ -14,6 +15,10 @@ type Step = {
     offset?: [number, number]
     el?: HTMLElement
     pointTl?: gsap.core.Timeline
+    // filter?: string
+    contrast?: number
+    saturate?: number
+    grayscale?: number
     scale: number
     scroll: HTMLElement
 }
@@ -30,6 +35,7 @@ let steps: Step[] = [
         el: points[0],
         scale: 2,
         scroll: scrollItems[1],
+        grayscale: 1,
     },
 
     {
@@ -38,18 +44,22 @@ let steps: Step[] = [
         scale: 3.5,
         offset: [25, 0],
         scroll: scrollItems[2],
+        contrast: 1.7,
+        grayscale: 1,
     },
     {
         pos: [55.5, 38],
         el: points[2],
         scale: 2,
         scroll: scrollItems[3],
+        grayscale: 1,
     },
     {
         pos: [75, 10],
         el: points[3],
         scale: 1,
         scroll: scrollItems[4],
+        grayscale: 0,
     },
 ]
 
@@ -108,10 +118,20 @@ const animStep = (step: Step) => {
         start: 'top center',
         end: 'bottom center',
         onToggle: () => {
+            let contrast = step.contrast || 1
+            let saturate = step.saturate || 1
+            let grayscale = step.grayscale || 0
+            let filter = `contrast(${contrast}) saturate(${saturate}) grayscale(${grayscale})`
+
             gsap.to(image, {
                 scale: step.scale,
                 xPercent: (50 - step.pos[0]) * (step.scale - 1) + offset[0],
                 yPercent: (50 - step.pos[1]) * (step.scale - 1) + offset[1],
+                overwrite: 'auto',
+            })
+
+            gsap.to(overlay, {
+                backdropFilter: filter,
                 overwrite: 'auto',
             })
         },

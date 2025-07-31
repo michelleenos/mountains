@@ -680,6 +680,7 @@ let points = [
 let scrollItems = [
     ...document.querySelectorAll('.scroll-item')
 ];
+let overlay = document.querySelector('.mountains-img-overlay');
 let steps = [
     {
         pos: [
@@ -700,7 +701,8 @@ let steps = [
         ],
         el: points[0],
         scale: 2,
-        scroll: scrollItems[1]
+        scroll: scrollItems[1],
+        grayscale: 1
     },
     {
         pos: [
@@ -713,7 +715,9 @@ let steps = [
             25,
             0
         ],
-        scroll: scrollItems[2]
+        scroll: scrollItems[2],
+        contrast: 1.7,
+        grayscale: 1
     },
     {
         pos: [
@@ -722,7 +726,8 @@ let steps = [
         ],
         el: points[2],
         scale: 2,
-        scroll: scrollItems[3]
+        scroll: scrollItems[3],
+        grayscale: 1
     },
     {
         pos: [
@@ -731,7 +736,8 @@ let steps = [
         ],
         el: points[3],
         scale: 1,
-        scroll: scrollItems[4]
+        scroll: scrollItems[4],
+        grayscale: 0
     }
 ];
 if (points.length < steps.length - 1 || scrollItems.length < steps.length) throw new Error('Mismatch in number of points, steps, and scroll items');
@@ -800,10 +806,18 @@ const animStep = (step)=>{
         start: 'top center',
         end: 'bottom center',
         onToggle: ()=>{
+            let contrast = step.contrast || 1;
+            let saturate = step.saturate || 1;
+            let grayscale = step.grayscale || 0;
+            let filter = `contrast(${contrast}) saturate(${saturate}) grayscale(${grayscale})`;
             (0, _gsapDefault.default).to(image, {
                 scale: step.scale,
                 xPercent: (50 - step.pos[0]) * (step.scale - 1) + offset[0],
                 yPercent: (50 - step.pos[1]) * (step.scale - 1) + offset[1],
+                overwrite: 'auto'
+            });
+            (0, _gsapDefault.default).to(overlay, {
+                backdropFilter: filter,
                 overwrite: 'auto'
             });
         },
@@ -836,37 +850,7 @@ animStep(steps[4]) // const config = { scale: 2, origin: [0.8, 0.4] }
  // console.log(vars)
 ;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"bh0vM","gsap":"jhOVE","gsap/all":"ljg6G"}],"bh0vM":[function(require,module,exports,__globalThis) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"jhOVE":[function(require,module,exports,__globalThis) {
+},{"gsap":"jhOVE","gsap/all":"ljg6G","@parcel/transformer-js/src/esmodule-helpers.js":"bh0vM"}],"jhOVE":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "gsap", ()=>gsapWithCSS);
@@ -3933,7 +3917,37 @@ _coreReady = 1;
 _windowExists() && _wake();
 var Power0 = _easeMap.Power0, Power1 = _easeMap.Power1, Power2 = _easeMap.Power2, Power3 = _easeMap.Power3, Power4 = _easeMap.Power4, Linear = _easeMap.Linear, Quad = _easeMap.Quad, Cubic = _easeMap.Cubic, Quart = _easeMap.Quart, Quint = _easeMap.Quint, Strong = _easeMap.Strong, Elastic = _easeMap.Elastic, Back = _easeMap.Back, SteppedEase = _easeMap.SteppedEase, Bounce = _easeMap.Bounce, Sine = _easeMap.Sine, Expo = _easeMap.Expo, Circ = _easeMap.Circ;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"bh0vM"}],"9pOwn":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"bh0vM"}],"bh0vM":[function(require,module,exports,__globalThis) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"9pOwn":[function(require,module,exports,__globalThis) {
 /*!
  * CSSPlugin 3.13.0
  * https://gsap.com

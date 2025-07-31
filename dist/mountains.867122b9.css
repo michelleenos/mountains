@@ -149,7 +149,7 @@ body {
 .mountains-img-overlay {
   backdrop-filter: blur();
   pointer-events: none;
-  background-image: radial-gradient(#0000 1px, #fffc 1px);
+  background-image: radial-gradient(#0000 1px, #ffffffb3 1px);
   background-size: 3px 3px;
   width: 100%;
   height: 100%;
